@@ -39,22 +39,113 @@
 </head>
 
 <body>
-<textarea id="terminal" autofocus spellcheck="false">-input ""</textarea>
+<textarea id="terminal" spellcheck="false"></textarea>
 
 <script>
 const terminal = document.getElementById("terminal");
 
-terminal.addEventListener("input", () => {
-    const text = terminal.value;
-    
-    if (!text.startsWith('-input "')) {
-        terminal.value = '-input ""';
-        terminal.setSelectionRange(8, 8);
+const prefix = '-input "';
+const suffix = '"';
+
+let content = "";
+
+function render(cursor = content.length) {
+    terminal.value = prefix + content + suffix;
+    terminal.setSelectionRange(
+        prefix.length + cursor,
+        prefix.length + cursor
+    );
+}
+
+terminal.addEventListener("beforeinput", (e) => {
+    const start = terminal.selectionStart;
+    const end = terminal.selectionEnd;
+
+    const contentStart = prefix.length;
+    const contentEnd = prefix.length + content.length;
+
+    if (start < contentStart || end > contentEnd) {
+        e.preventDefault();
+        return;
+    }
+
+    if (e.inputType === "insertText") {
+        e.preventDefault();
+        content = content.slice(0, start - contentStart)
+            + e.data
+            + content.slice(end - contentStart);
+
+        render(start - contentStart + e.data.length);
+    }
+
+    if (e.inputType === "deleteContentBackward") {
+        e.preventDefault();
+
+        if (start !== end) {
+            content = content.slice(0, start - contentStart)
+                + content.slice(end - contentStart);
+            render(start - contentStart);
+        } else if (start > contentStart) {
+            content = content.slice(0, start - contentStart - 1)
+                + content.slice(start - contentStart);
+            render(start - contentStart - 1);
+        }
+    }
+
+    if (e.inputType === "deleteContentForward") {
+        e.preventDefault();
+
+        if (start !== end) {
+            content = content.slice(0, start - contentStart)
+                + content.slice(end - contentStart);
+        } else {
+            content = content.slice(0, start - contentStart)
+                + content.slice(start - contentStart + 1);
+        }
+
+        render(start - contentStart);
     }
 });
 
+terminal.addEventListener("keydown", (e) => {
+    const pos = terminal.selectionStart;
+
+    if (e.key === "Home") {
+        e.preventDefault();
+        render(0);
+    }
+
+    if (e.key === "End") {
+        e.preventDefault();
+        render(content.length);
+    }
+
+    if (e.key === "ArrowLeft" && pos <= prefix.length) {
+        e.preventDefault();
+    }
+
+    if (e.key === "ArrowRight" &&
+        pos >= prefix.length + content.length) {
+        e.preventDefault();
+    }
+
+    if (e.key === "Enter") {
+        e.preventDefault();
+    }
+});
+
+terminal.addEventListener("click", () => {
+    const pos = terminal.selectionStart;
+
+    if (pos < prefix.length) {
+        render(0);
+    } else if (pos > prefix.length + content.length) {
+        render(content.length);
+    }
+});
+
+render();
 terminal.focus();
-terminal.setSelectionRange(8, 8);
 </script>
 </body>
 </html>
