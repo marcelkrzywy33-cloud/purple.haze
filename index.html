@@ -1,4 +1,89 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        color: #00ff41;
+        height: 100vh;
+        overflow: auto;
+        padding: 12px;
+        box-sizing: border-box;
+        font-family: 'VT323', monospace;
+        font-size: 25px;
+        line-height: 1.1;
+    }
+
+    .flash {
+        animation: flash 0.5s ease-out;
+    }
+
+    @keyframes flash {
+        0% { opacity: 0; }
+        15% { opacity: 1; }
+        30% { opacity: 0.2; }
+        50% { opacity: 1; }
+        65% { opacity: 0.4; }
+        100% { opacity: 1; }
+    }
+
+    #boot, #access, #editor {
+        display: none;
+    }
+
+    #access {
+        margin-top: 1.1em;
+    }
+
+    .input-line {
+        display: flex;
+        align-items: baseline;
+        white-space: pre;
+    }
+
+    .prefix, .suffix {
+        flex-shrink: 0;
+    }
+
+    .editable {
+        outline: none;
+        white-space: pre-wrap;
+        min-width: 2px;
+        overflow-wrap: anywhere;
+    }
+
+    ::selection {
+        background: #00ff41;
+        color: black;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="title" class="flash">FILE DATABASE V.1.0</div>
+
+<div id="boot">
+    BOOTING, PLEASE WAIT<span id="dots">.</span>
+</div>
+
+<div id="access">
+    PLEASE INPUT ACCESS CODE
+</div>
+
+<div id="editor">
+    <div class="input-line">
+        <span class="prefix">-input "</span><span class="editable" contenteditable="true" spellcheck="false"></span><span class="suffix">"</span>
+    </div>
+</div>
+
 <script>
 const boot = document.getElementById("boot");
 const dots = document.getElementById("dots");
@@ -13,13 +98,13 @@ setTimeout(() => {
     boot.classList.add("flash");
 }, 3000);
 
-// Cycle dots continuously
+// Animate dots
 const dotAnimation = setInterval(() => {
     dotCount = dotCount % 3 + 1;
     dots.textContent = ".".repeat(dotCount);
 }, 500);
 
-// Show access prompt after another 5 seconds
+// Show access prompt after 8 seconds
 setTimeout(() => {
     clearInterval(dotAnimation);
     dots.textContent = "...";
@@ -33,7 +118,7 @@ setTimeout(() => {
     editor.querySelector(".editable").focus();
 }, 8000);
 
-// Create another protected input line when Enter is pressed
+// Create additional protected input lines
 editor.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
         e.preventDefault();
@@ -61,3 +146,6 @@ editor.addEventListener("keydown", function(e) {
     }
 });
 </script>
+
+</body>
+</html>
