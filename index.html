@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #000;
+        color: #00ff41;
+        font-family: "Courier New", monospace;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .terminal {
+        padding: 25px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header {
+        color: #00ff41;
+        font-size: 14px;
+        margin-bottom: 15px;
+        opacity: 0.7;
+    }
+
+    .terminal-output {
+        flex: 1;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .input-line {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .prompt {
+        margin-right: 10px;
+        color: #00ff41;
+    }
+
+    textarea {
+        background: transparent;
+        color: #00ff41;
+        border: none;
+        outline: none;
+        resize: none;
+        flex: 1;
+        font-family: inherit;
+        font-size: 15px;
+        caret-color: #00ff41;
+        height: 24px;
+    }
+
+    ::selection {
+        background: #00ff41;
+        color: #000;
+    }
+
+    .cursor {
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+</style>
+</head>
+
+<body>
+<div class="terminal">
+
+    <div class="header">
+        TERMINAL INTERFACE v1.0<br>
+        SYSTEM STATUS: ONLINE<br>
+        ------------------------------
+    </div>
+
+    <div class="terminal-output" id="output">
+Welcome to the terminal.
+Type anything below.
+
+    </div>
+
+    <div class="input-line">
+        <span class="prompt">root@system:~$</span>
+        <textarea id="input" autofocus spellcheck="false"
+        placeholder="Type here..."></textarea>
+    </div>
+
+</div>
+
+<script>
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+
+        const command = input.value;
+
+        if (command.trim() !== "") {
+            output.textContent +=
+                "\nroot@system:~$ " + command + "\n";
+        }
+
+        input.value = "";
+        output.scrollTop = output.scrollHeight;
+    }
+});
+</script>
+</body>
+</html>
