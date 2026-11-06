@@ -4,13 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
+
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
 <style>
     body {
         margin: 0;
-        background: black;
-        color: #00ff41;
-        font-family: "Courier New", monospace;
+        background: #000;
         height: 100vh;
+        overflow: hidden;
     }
 
     textarea {
@@ -18,17 +20,24 @@
         height: 100vh;
         padding: 12px;
         box-sizing: border-box;
-        background: black;
+        background: #000;
         color: #00ff41;
         border: none;
         outline: none;
         resize: none;
-        font-family: inherit;
-        font-size: 16px;
+        font-family: 'VT323', monospace;
+        font-size: 25px;
+        line-height: 1.1;
         caret-color: #00ff41;
+    }
+
+    ::selection {
+        background: #00ff41;
+        color: #000;
     }
 </style>
 </head>
+
 <body>
 <textarea autofocus spellcheck="false"></textarea>
 </body>
