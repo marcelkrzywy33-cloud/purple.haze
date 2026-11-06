@@ -39,6 +39,22 @@
 </head>
 
 <body>
-<textarea autofocus spellcheck="false"></textarea>
+<textarea id="terminal" autofocus spellcheck="false">-input ""</textarea>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+terminal.addEventListener("input", () => {
+    const text = terminal.value;
+    
+    if (!text.startsWith('-input "')) {
+        terminal.value = '-input ""';
+        terminal.setSelectionRange(8, 8);
+    }
+});
+
+terminal.focus();
+terminal.setSelectionRange(8, 8);
+</script>
 </body>
 </html>
