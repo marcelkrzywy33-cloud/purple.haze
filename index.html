@@ -34,12 +34,16 @@
         100% { opacity: 1; }
     }
 
-    #boot, #access, #editor {
+    #boot, #access, #editor, #result {
         display: none;
     }
 
     #access {
         margin-top: 1.1em;
+    }
+
+    #result {
+        margin-top: 0.5em;
     }
 
     .input-line {
@@ -84,13 +88,17 @@
     </div>
 </div>
 
+<div id="result"></div>
+
 <script>
 const boot = document.getElementById("boot");
 const dots = document.getElementById("dots");
 const access = document.getElementById("access");
 const editor = document.getElementById("editor");
+const result = document.getElementById("result");
 
 let dotCount = 1;
+const correctCode = "68213";
 
 // Show boot message after 3 seconds
 setTimeout(() => {
@@ -118,31 +126,33 @@ setTimeout(() => {
     editor.querySelector(".editable").focus();
 }, 8000);
 
-// Create additional protected input lines
+// Check access code
 editor.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
         e.preventDefault();
 
-        const newLine = document.createElement("div");
-        newLine.className = "input-line";
+        const input = editor.querySelector(".editable");
+        const enteredCode = input.textContent.trim();
 
-        const prefix = document.createElement("span");
-        prefix.className = "prefix";
-        prefix.textContent = '-input "';
+        // Remove previous input
+        input.textContent = "";
 
-        const editable = document.createElement("span");
-        editable.className = "editable";
-        editable.contentEditable = "true";
-        editable.spellcheck = false;
+        // Display result
+        result.style.display = "block";
+        result.classList.remove("flash");
 
-        const suffix = document.createElement("span");
-        suffix.className = "suffix";
-        suffix.textContent = '"';
+        void result.offsetWidth;
 
-        newLine.append(prefix, editable, suffix);
-        editor.appendChild(newLine);
+        if (enteredCode === correctCode) {
+            result.textContent = "CORRECT";
+        } else {
+            result.textContent = "INCORRECT";
+        }
 
-        editable.focus();
+        result.classList.add("flash");
+
+        // Refocus input
+        input.focus();
     }
 });
 </script>
